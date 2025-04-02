@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
 
-function App() {
-  // User wallet balance
+const AuctionAppPreview = () => {
+  // Define CSS for marquee animation
+  const marqueeStyle = {
+    '@keyframes marquee': {
+      '0%': { transform: 'translateX(100%)' },
+      '100%': { transform: 'translateX(-100%)' }
+    },
+    animation: 'marquee 10s linear infinite',
+    display: 'inline-block',
+    paddingLeft: '100%',
+    whiteSpace: 'nowrap'
+  };
+  // State variables from the original code
   const [xtcBalance, setXtcBalance] = useState(3428.92);
-  
   const [timeLeft, setTimeLeft] = useState('23:59:59');
   const [currentTrack, setCurrentTrack] = useState({
     title: 'MIDNIGHT BLUES',
@@ -12,8 +21,6 @@ function App() {
   });
   const [isPlaying, setIsPlaying] = useState(true);
   const [activeTab, setActiveTab] = useState('main');
-  
-  // Profile subtabs state
   const [profileSubtab, setProfileSubtab] = useState('account');
   
   // Sample favorites data
@@ -24,135 +31,24 @@ function App() {
     { id: 4, name: 'STRIPED COTTON SHIRT', seller: 'MODERN BASICS', inStock: true }
   ]);
   
-  // Swipe states
-  const [swipeX, setSwipeX] = useState(0);
-  const [startX, setStartX] = useState(0);
-  const [swiping, setSwiping] = useState(false);
-  
-  const swipeThreshold = 100; // Minimum pixels to consider a swipe complete
-  
   // Format XTC balance with 2 decimal places
   const formatXtc = (value) => {
     return `${value.toFixed(2)} XTC`;
   };
   
-  // Timer effect for countdown
-  useEffect(() => {
-    const timer = setInterval(() => {
-      // Format the countdown
-      const [hours, minutes, seconds] = timeLeft.split(':').map(Number);
-      let newSeconds = seconds - 1;
-      let newMinutes = minutes;
-      let newHours = hours;
-      
-      if (newSeconds < 0) {
-        newSeconds = 59;
-        newMinutes -= 1;
-      }
-      
-      if (newMinutes < 0) {
-        newMinutes = 59;
-        newHours -= 1;
-      }
-      
-      if (newHours < 0) {
-        // Timer ended
-        clearInterval(timer);
-        return;
-      }
-      
-      setTimeLeft(
-        `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}:${newSeconds.toString().padStart(2, '0')}`
-      );
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, [timeLeft]);
-  
-  // Mouse event handlers
-  const handleMouseDown = (e) => {
-    setSwiping(true);
-    setStartX(e.clientX);
-  };
-  
-  const handleMouseMove = (e) => {
-    if (!swiping) return;
-    const deltaX = e.clientX - startX;
-    setSwipeX(deltaX);
-  };
-  
-  const handleMouseUp = () => {
-    if (!swiping) return;
-    
-    if (Math.abs(swipeX) >= swipeThreshold) {
-      if (swipeX > 0) {
-        // Right swipe - Buy
-        handleBuyClick();
-      } else {
-        // Left swipe - Skip
-        handleSkipClick();
-      }
-    }
-    
-    // Reset
-    setSwiping(false);
-    setSwipeX(0);
-  };
-  
-  // Touch event handlers
-  const handleTouchStart = (e) => {
-    setSwiping(true);
-    setStartX(e.touches[0].clientX);
-  };
-  
-  const handleTouchMove = (e) => {
-    if (!swiping) return;
-    const deltaX = e.touches[0].clientX - startX;
-    setSwipeX(deltaX);
-    
-    // Prevent default to avoid scrolling while swiping
-    if (Math.abs(deltaX) > 10) {
-      e.preventDefault();
-    }
-  };
-  
-  const handleTouchEnd = () => {
-    if (!swiping) return;
-    
-    if (Math.abs(swipeX) >= swipeThreshold) {
-      if (swipeX > 0) {
-        // Right swipe - Buy
-        handleBuyClick();
-      } else {
-        // Left swipe - Skip
-        handleSkipClick();
-      }
-    }
-    
-    // Reset
-    setSwiping(false);
-    setSwipeX(0);
-  };
-  
   // Button handlers
   const handleBuyClick = () => {
     console.log('Buy clicked');
-    // Here you would put your purchase logic
   };
   
   const handleSkipClick = () => {
     console.log('Skip clicked');
-    // Here you would put your skip logic
   };
   
   // Toggle play/pause
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
-  
-  // Calculate indicator opacities
-  const rightIndicatorOpacity = Math.min(Math.max(swipeX / 100, 0), 1);
-  const leftIndicatorOpacity = Math.min(Math.max(-swipeX / 100, 0), 1);
   
   // Remove item from favorites
   const removeFavorite = (id) => {
@@ -176,37 +72,8 @@ function App() {
       {/* Centered Item */}
       <div className="flex flex-col items-center w-full mb-3">
         {/* Item Image */}
-        <div 
-          className="relative w-full max-w-xs h-40 bg-gray-100 flex items-center justify-center overflow-hidden"
-          style={{ 
-            transform: `translateX(${swipeX}px)`,
-            transition: swiping ? 'none' : 'transform 0.3s ease'
-          }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
+        <div className="relative w-full max-w-xs h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
           <span className="text-gray-500 text-sm">ITEM IMAGE</span>
-          
-          {/* Buy Indicator (Right Swipe) */}
-          <div 
-            className="absolute top-0 right-0 bottom-0 w-16 bg-green-500 flex items-center justify-center"
-            style={{ opacity: rightIndicatorOpacity }}
-          >
-            <span className="text-white font-bold">BUY</span>
-          </div>
-          
-          {/* Skip Indicator (Left Swipe) */}
-          <div 
-            className="absolute top-0 left-0 bottom-0 w-16 bg-gray-500 flex items-center justify-center"
-            style={{ opacity: leftIndicatorOpacity }}
-          >
-            <span className="text-white font-bold">SKIP</span>
-          </div>
         </div>
         
         {/* Item Details - Centered */}
@@ -225,10 +92,18 @@ function App() {
       <div className="flex justify-center gap-4">
         <button
           onClick={handleSkipClick}
-          className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"
+          className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        <button
+          className="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
           </svg>
         </button>
         
@@ -368,10 +243,6 @@ function App() {
               </div>
             )}
           </div>
-          
-          <div className="text-xs text-gray-500 text-center mt-2 mb-1">
-            To add items to favorites, tap the heart icon while browsing
-          </div>
         </div>
       )}
     </div>
@@ -390,7 +261,7 @@ function App() {
   };
   
   return (
-    <div className="h-screen max-h-screen bg-gray-50 flex flex-col font-sans overflow-hidden">
+    <div className="h-screen max-h-screen bg-gray-50 flex flex-col font-sans overflow-hidden max-w-md mx-auto border border-gray-300">
       {/* Content Area - Fixed, no scrolling, more compact */}
       <div className="flex-1 p-2 flex flex-col">
         <div className="flex-1 flex flex-col">
@@ -405,13 +276,22 @@ function App() {
           <div className="flex items-center flex-1">
             {/* Red Live Indicator */}
             <div className="flex items-center mr-2">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse mr-1"></div>
-              <span className="text-xs text-red-500 font-medium">LIVE</span>
+              <div className="w-2 h-2 bg-red-500 rounded-full mr-1 animate-pulse"></div>
+              <span className="text-xs text-red-500 font-medium animate-pulse">LIVE</span>
             </div>
             {/* Track Info */}
-            <div className="flex-1 truncate">
-              <p className="font-semibold text-xs leading-tight truncate">{currentTrack.title}</p>
-              <p className="text-gray-500 text-xs truncate">{currentTrack.artist}</p>
+            <div className="flex-1 overflow-hidden">
+              <div className="relative">
+                <div style={{
+                  animation: 'marquee 8s linear infinite',
+                  whiteSpace: 'nowrap',
+                  position: 'relative',
+                  display: 'inline-block'
+                }}>
+                  <p className="font-semibold text-xs leading-tight">{currentTrack.title}</p>
+                  <p className="text-gray-500 text-xs">{currentTrack.artist}</p>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -472,6 +352,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default AuctionAppPreview;
