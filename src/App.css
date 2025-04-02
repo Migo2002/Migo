@@ -1,38 +1,189 @@
-.App {
-  text-align: center;
+/* Custom CSS for the Radio Selling App */
+
+/* Utility classes */
+.bg-black {
+  background-color: #000;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.text-white {
+  color: #ffffff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.bg-gray-700 {
+  background-color: #374151;
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.bg-red-100 {
+  background-color: #fee2e2;
+}
+
+.bg-yellow-100 {
+  background-color: #fef3c7;
+}
+
+.bg-green-100 {
+  background-color: #dcfce7;
+}
+
+.text-blue-500 {
+  color: #3b82f6;
+}
+
+.text-blue-700 {
+  color: #1d4ed8;
+}
+
+.text-red-400 {
+  color: #f87171;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+.text-yellow-500 {
+  color: #f59e0b;
+}
+
+.text-green-500 {
+  color: #22c55e;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+.text-gray-700 {
+  color: #374151;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Container max widths for different screen sizes */
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
 }
 
-.App-link {
-  color: #61dafb;
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Responsive breakpoints */
+/* Mobile styles (default) */
+@media (max-width: 767px) {
+  .md\:block {
+    display: none;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .hidden.md\:block {
+    display: block;
   }
+  
+  .md\:flex-row {
+    flex-direction: row;
+  }
+  
+  .md\:items-start {
+    align-items: flex-start;
+  }
+  
+  /* Centered marketplace view for desktop */
+  .marketplace-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  /* Improved spacing for desktop */
+  .desktop-py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .desktop-px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Custom animations for marquee text */
+.marquee {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.marquee-content {
+  animation: marquee 8s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Support for horizontal swipe animations */
+.swipe-container {
+  touch-action: pan-y;
+}
+
+/* Animation for the play/pause button */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
